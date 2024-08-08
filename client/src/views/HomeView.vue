@@ -1,9 +1,16 @@
 <script setup>
 import { ref } from 'vue';
-
+import addesign from '../components/theadddesign.vue'
 const saleimg=ref('https://images.unsplash.com/photo-1578986175247-7d60c6df07c5?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-// const category=ref('sale')
 
+import servicesvg from '../assets/shipping.svg'
+import refundsvg from '../assets/refund.svg'
+import supportsvg from '../assets/support.svg'
+
+
+
+
+import policy from '../components/policy.vue'
 const saleset=ref('30')
 const bestval=ref('*')
 
@@ -111,6 +118,22 @@ bestval.value=thebuttonval;
 
 
 </section>
+
+<addesign/>
+
+
+<section class="policyconn">
+
+
+<policy :svg="servicesvg" intro="Free Shipping"/>
+
+<policy :svg="refundsvg" intro="100% REFUND" />
+
+<policy :svg="supportsvg" intro="SUPPORT 24/7" />
+
+
+</section>
+
 
 </template>
 
@@ -236,6 +259,11 @@ gap: 3%;
     padding: 5px 5px;
 }
 
-
-
+.policyconn{
+    /* border: 2px solid red; */
+    height: 50vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
 </style>
