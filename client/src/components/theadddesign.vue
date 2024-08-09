@@ -31,7 +31,7 @@ background-color: var(--blue);
     gap: 2.5%;
 }
 .adtext h1{
-    font-size: 3rem;
+    font-size: 3vw;
 font-family: var(--font);
 font-weight: 400;
 color: white;

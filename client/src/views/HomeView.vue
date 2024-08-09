@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import addesign from '../components/theadddesign.vue'
 const saleimg=ref('https://images.unsplash.com/photo-1578986175247-7d60c6df07c5?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-
+import itemcard from '../components/itemcard.vue';
 import servicesvg from '../assets/shipping.svg'
 import refundsvg from '../assets/refund.svg'
 import supportsvg from '../assets/support.svg'
@@ -49,68 +49,52 @@ bestval.value=thebuttonval;
 
 <div class="resultproducts">
 
+    
 <div class="products_card">
-    <div class="productimg">
-        <img src="../assets/Product Image (1).jpg" alt="">
-    </div>
-<h4>Lorem ipsum dolor sit amet.</h4>
-<h5>$200</h5>
+<itemcard/>
 </div>
 
 <div class="products_card">
-    <div class="productimg">
-        <img src="../assets/Product Image (1).jpg" alt="">
-    </div>
-<h4>Lorem ipsum dolor sit amet.</h4>
-<h5>$200</h5>
+<itemcard/>
 </div>
 
 <div class="products_card">
-    <div class="productimg">
-        <img src="../assets/Product Image (1).jpg" alt="">
-    </div>
-<h4>Lorem ipsum dolor sit amet.</h4>
-<h5>$200</h5>
+<itemcard/>
 </div>
 
 <div class="products_card">
-    <div class="productimg">
-        <img src="../assets/Product Image (1).jpg" alt="">
-    </div>
-<h4>Lorem ipsum dolor sit amet.</h4>
-<h5>$200</h5>
+<itemcard/>
+</div>
+<div class="products_card">
+<itemcard/>
 </div>
 
 <div class="products_card">
-    <div class="productimg">
-        <img src="../assets/Product Image (1).jpg" alt="">
-    </div>
-<h4>Lorem ipsum dolor sit amet.</h4>
-<h5>$200</h5>
+<itemcard/>
+</div>
+<div class="products_card">
+<itemcard/>
+</div>
+<div class="products_card">
+<itemcard/>
 </div>
 
 <div class="products_card">
-    <div class="productimg">
-        <img src="../assets/Product Image (1).jpg" alt="">
-    </div>
-<h4>Lorem ipsum dolor sit amet.</h4>
-<h5>$200</h5>
+<itemcard/>
 </div>
 
 <div class="products_card">
-    <div class="productimg">
-        <img src="../assets/Product Image (1).jpg" alt="">
-    </div>
-<h4>Lorem ipsum dolor sit amet.</h4>
-<h5>$200</h5>
+<itemcard/>
 </div>
 
+
 <div class="products_card">
-    <div class="productimg">
-        <img src="../assets/Product Image (1).jpg" alt="">
-    </div>
-<h4>Lorem ipsum dolor sit amet.</h4>
-<h5>$200</h5>
+<itemcard/>
+</div>
+
+
+<div class="products_card">
+<itemcard/>
 </div>
 
 </div>
@@ -169,10 +153,7 @@ margin: 5px 10px;
     font-size: 2rem;
 }
 
-.bestsellerconn{
-    /* border: 2px solid brown; */
-    height: 800px;
-}
+
 .heading{
     /* border: 2px solid green; */
     height: 10%;
@@ -213,13 +194,14 @@ margin: 5px 10px;
 
 .resultproducts{
 /* border: 2px solid brown; */
-height: 85%;
+/* height:100%; */
 display: grid;
+/* height: auto; */
 padding: 1.2% 10px;
 grid-template-columns: repeat(4,18%);
-/* grid-template-rows: 200px 200px; */
+/* grid-template-columns: 200px 200px; */
 justify-content: space-around;
-gap: 3%;
+gap: 30px;
 }
 
 .products_card{
