@@ -1,5 +1,25 @@
+<script setup>
+import { ref } from 'vue';
+
+const paymentform=ref(false);
+const checkout=()=>
+{
+    paymentform.value=true
+}
+</script>
+
 <template>
    <section class="cart_conn">
+    <div v-if="paymentform" class="payment_conn">
+        
+<div class="paymentform">
+    from
+</div>
+
+    </div>
+
+
+
 <div class="items">
     <table>
   <tr class="tabletop" >
@@ -80,7 +100,7 @@
 
 <h2>Total <span>$118</span></h2>
 
-<button>Check out</button>
+<button @click="checkout">Check out</button>
     </div>
 </div>
    </section>
@@ -90,9 +110,29 @@
 *{
     scroll-behavior: smooth;
 }
+.payment_conn{
+    border: 2px solid red;
+    position: absolute;
+    top:0;
+    height: 100%;
+width: 100%;
+z-index: 1;
+background-color: rgba(0, 0, 0, 0.151);
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.paymentform{
+    border: 2px solid blue;
+    width: 60%;
+    height: 90%;
+    background-color: white;
+    border-radius: 10px;
+}
 .cart_conn{
     /* border: 2px solid red; */
     height: 95vh;
+    position: relative;
 }
 .items
 {
