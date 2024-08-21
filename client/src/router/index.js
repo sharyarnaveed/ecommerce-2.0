@@ -34,6 +34,7 @@ const router = createRouter({
       props:true,
       component: () => import('../views/itemdetail.vue')
     }
+
   ]
 })
 

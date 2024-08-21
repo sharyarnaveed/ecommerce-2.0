@@ -8,16 +8,12 @@ const handlesubmiison = () => {
   paymentsucess.value = true;
 };
 
-const closeform=ref(false)
-const closewhole=()=>
-{
-    closeform.value=true;
-}
+
 </script>
 
 <template>
 
-  <div :class="{disapperwhole:closeform}" class="paymentform">
+  <div class="paymentform">
     <div :class="{ notdiaplyform: paymentsucess }" class="formheading">
       <h1>Make Payment</h1>
     </div>
@@ -106,7 +102,7 @@ const closewhole=()=>
         </svg>
         <h1>Success</h1>
 
-        <button @click="closewhole">Complete</button>
+        <button  @click="$emit('successpayment')">Complete</button>
       </div>
 
 
@@ -390,7 +386,5 @@ const closewhole=()=>
 }
 
 
-.disapperwhole{
-    display: none;
-}
+
 </style>

@@ -2,17 +2,28 @@
 import { ref } from 'vue';
 import paymentform from '@/components/paymentform.vue'
 const paymentformload=ref(false);
+
+const closeform=ref(false)
+const closewhole=()=>
+{
+    closeform.value=true;
+    console.log("close");
+    paymentformload.value=false
+}
+
+// load form at checkout
 const checkout=()=>
 {
+    console.log("checkout");
     paymentformload.value=true
 }
 </script>
 
 <template>
    <section class="cart_conn">
-    <div v-if="paymentformload" class="payment_conn">
+    <div  v-if="paymentformload" class="payment_conn">
         
-<paymentform/>
+<paymentform @successpayment="closewhole"/>
 
     </div>
 
@@ -101,12 +112,16 @@ const checkout=()=>
 <button @click="checkout">Check out</button>
     </div>
 </div>
+
    </section>
 </template>
 
 <style scoped>
 *{
     scroll-behavior: smooth;
+}
+.disapperwhole{
+    display: none;
 }
 .payment_conn{
     /* border: 2px solid red; */
