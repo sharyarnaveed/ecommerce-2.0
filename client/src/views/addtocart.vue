@@ -1,20 +1,18 @@
 <script setup>
 import { ref } from 'vue';
-
-const paymentform=ref(false);
+import paymentform from '@/components/paymentform.vue'
+const paymentformload=ref(false);
 const checkout=()=>
 {
-    paymentform.value=true
+    paymentformload.value=true
 }
 </script>
 
 <template>
    <section class="cart_conn">
-    <div v-if="paymentform" class="payment_conn">
+    <div v-if="paymentformload" class="payment_conn">
         
-<div class="paymentform">
-    from
-</div>
+<paymentform/>
 
     </div>
 
@@ -111,19 +109,19 @@ const checkout=()=>
     scroll-behavior: smooth;
 }
 .payment_conn{
-    border: 2px solid red;
+    /* border: 2px solid red; */
     position: absolute;
     top:0;
     height: 100%;
 width: 100%;
 z-index: 1;
-background-color: rgba(0, 0, 0, 0.151);
+background-color: rgba(0, 0, 0, 0.233);
 display: flex;
 justify-content: center;
 align-items: center;
 }
 .paymentform{
-    border: 2px solid blue;
+    /* border: 2px solid blue; */
     width: 60%;
     height: 90%;
     background-color: white;

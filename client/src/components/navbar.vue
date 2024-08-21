@@ -90,7 +90,7 @@ m2120 0 c45 -23 80 -80 80 -130 0 -76 -74 -150 -150 -150 -76 0 -150 74 -150
                 <router-link to="/productdisplay" class="theoption">BAGS</router-link>
                 <router-link to="/productdisplay" class="theoption">SNEAKERS</router-link>
                 <router-link to="/productdisplay" class="theoption">BELT</router-link>
-                <router-link to="/productdisplay" class="theoption">CONTACT</router-link>
+                <router-link to="/contact" class="theoption">CONTACT</router-link>
             </ul>
         </nav>
     </header>
