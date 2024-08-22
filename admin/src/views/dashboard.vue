@@ -12,7 +12,7 @@
     <div class="logo">
 
 
-        <router-link to="/" class="icon">
+        <router-link to="/adminhome" class="icon">
                 <svg width="98" height="98" viewBox="0 0 295 98" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect y="0.778564" width="96.5844" height="96.5844" rx="16" fill="#40BFFF"/>
 <path fill-rule="evenodd" clip-rule="evenodd" d="M68.1838 45.2765C70.2792 47.372 70.2792 50.7694 68.1838 52.8649L52.0864 68.9623C49.9909 71.0578 46.5935 71.0578 44.498 68.9623L28.4006 52.8649C26.3051 50.7694 26.3051 47.372 28.4006 45.2765L44.498 29.1791C46.5935 27.0837 49.9909 27.0837 52.0864 29.1791L68.1838 45.2765ZM48.2922 40.5617L39.7832 49.0707L48.2922 57.5797L56.8012 49.0707L48.2922 40.5617Z" fill="white"/>
@@ -32,9 +32,9 @@
 <li class="asideoptions">
     <router-link class="optionslink" to="/addproduct">Add Product</router-link> </li>
 <li class="asideoptions">
-    <router-link class="optionslink" to="">Add Category</router-link> </li>
+    <router-link class="optionslink" to="/addcategory">Add Category</router-link> </li>
 <li class="asideoptions">
-    <router-link class="optionslink" to="">View Products</router-link> </li>
+    <router-link class="optionslink" to="/theproducts">View Products</router-link> </li>
 <li class="asideoptions">
     <router-link class="optionslink" to="">Log Out</router-link> </li>
       </ul>
