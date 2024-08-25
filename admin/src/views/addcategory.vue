@@ -1,9 +1,63 @@
-<script setup></script>
+<script setup>
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+
+const thecategory=ref({
+  productname:''
+});
+const gottencategory=ref([]);
+
+const submitcategory=async()=>
+{
+  // console.log(thecategory.value.productname);
+try {
+  if(thecategory.value.productname=="")
+{
+  console.log("empty");
+}
+else
+{
+  const responce=await axios.post("/api/admin/addcategory",thecategory.value);
+  console.log(responce.data);
+thecategory.value={
+  productname:""
+}
+  if(responce.data)
+{
+  alert(responce.data.message);
+  getcategory();
+}
+
+}
+
+
+} catch (error) {
+  console.log(error);
+}
+}
+
+
+
+const getcategory=async()=>
+{
+  const getcateg=await axios.get("/api/admin/getcategory");
+  gottencategory.value=getcateg.data;
+  
+  // console.log(gottencategory.value);
+}
+onMounted(()=>
+{
+  getcategory();
+})
+</script>
 
 <template>
   <div class="categorycon">
-    <form action="" class="addcategory">
-      <input type="text" name="" id="" />
+
+
+
+    <form @submit.prevent="submitcategory"  class="addcategory">
+      <input  v-model="thecategory.productname" type="text" name="" id="" />
       <button type="submit">Add Category</button>
     </form>
 
@@ -13,9 +67,9 @@
           <th>Category Id</th>
           <th>Category Name</th>
         </tr>
-        <tr>
-          <td>Alfreds Futterkiste</td>
-          <td>Maria Anders</td>
+        <tr v-for="(item, index) in gottencategory" :key="item.category_id">
+          <td>{{ item.category_id }}</td>
+          <td>{{ item.category_name }}</td>
         </tr>
       </table>
     </div>
@@ -52,12 +106,14 @@
 .alreadycategory {
   /* border: 2px solid purple; */
   height: 70%;
+  overflow-y: auto;
 }
 
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
+  overflow-y: auto;
 }
 
 td,

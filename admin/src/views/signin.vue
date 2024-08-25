@@ -1,12 +1,24 @@
 <script setup>
+import axios from "axios";
 import { ref } from "vue";
 
-const username = ref("");
-const password = ref("");
+
+const userdetails=ref({
+  username:'',
+  password:'',
+
+})
+
 // const successmessage = ref('');
 
-const handlesignin = () => {
-  console.log("hello");
+const handlesignin = async() => {
+try {
+  const responce= await axios.post("/api/admin/register",userdetails.value);
+  console.log(responce.data);
+  console.log(responce);
+} catch (error) {
+  
+}
 };
 </script>
 
@@ -28,7 +40,7 @@ const handlesignin = () => {
 
       <form @submit.prevent="handlesignin" method="post" class="siginform">
         <input
-          v-model="username"
+          v-model="userdetails.username"
           type="text"
           class="siginform_input"
           placeholder="Username"
@@ -36,7 +48,7 @@ const handlesignin = () => {
           id=""
         />
         <input
-          v-model="password"
+          v-model="userdetails.password"
           type="password"
           placeholder="Password"
           class="siginform_input"

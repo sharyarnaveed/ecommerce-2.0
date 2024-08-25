@@ -1,9 +1,64 @@
 <script setup>
 import { ref } from 'vue';
 import {usesizes} from "@/stores/sizes"
-
+import axios from 'axios';
 const shoessizes=usesizes();
-const storesizes=ref([])
+const addproduct=ref({
+  productname:'',
+  price:'',
+  storesizes:[],
+description:'',
+img1:null,
+img2:null,
+img3:null,
+img4:null,
+img5:null,
+
+
+})
+
+const uploadfiles=(e)=>
+{
+  addproduct.value.img1=e.target.files[0]
+  // addproduct.value.img1=e.target.files[1]
+  // addproduct.value.img2=e.target.files[2]
+  // addproduct.value.img3=e.target.files[3]
+  // addproduct.value.img4=e.target.files[4]
+
+
+  console.log(addproduct.value.img1=e.target.files[0]);
+  // addproduct.value.img1=e.target.files[1],
+  // addproduct.value.img2=e.target.files[2],
+  // addproduct.value.img3=e.target.files[3],
+  // addproduct.value.img4=e.target.files[4]);
+}
+
+
+const handleproduct=async()=>
+{
+const formdata=new FormData();
+formdata.append('productname',addproduct.value.productname);
+formdata.append('price',addproduct.value.price);
+formdata.append('storesizes',JSON.stringify(addproduct.value.storesizes));
+// formdata.append('storesizes',addproduct.value.storesizes);
+
+formdata.append('description',addproduct.value.description);
+
+  formdata.append('img1',addproduct.value.img1);
+
+
+console.log(formdata);
+
+  // console.log(addproduct.value);
+try {
+  const responce=await axios.post("/api/admin/addproduct",formdata);
+  console.log(responce);
+
+} catch (error) {
+  console.log(error);
+}
+
+}
 
 
 
@@ -13,16 +68,16 @@ const addsizes=(theval, ischecked)=>
 
 if(ischecked)
 {
-    storesizes.value.push(theval);
+  addproduct.value.storesizes.push(theval);
 }
 else
 {
-   storesizes.value=storesizes.value.filter(value=>
+  addproduct.value.storesizes=addproduct.value.storesizes.filter(value=>
     value!==theval
    );
 }
 
-console.log(storesizes.value);
+console.log(addproduct.value.storesizes);
 }
 
 </script>
@@ -33,21 +88,21 @@ console.log(storesizes.value);
                   <h1>{{ ordersucess }}</h1>
               </div>
    -->
-    <form @submit.prevent="" class="order_now_container">
-      <h1>Order Now</h1>
+    <form @submit.prevent="handleproduct" class="order_now_container">
+      <h1>Add Product</h1>
       <div class="order_infocontainer">
         <div class="order_person_info">
           <input
             type="text"
-         
+         v-model="addproduct.productname"
             name=""
             placeholder="Product Name"
             id=""
           />
           <input
             type="text"
-        
-            pattern="\d*"
+        v-model="addproduct.price"
+           
             name=""
             placeholder="Product Price"
             id=""
@@ -68,16 +123,17 @@ console.log(storesizes.value);
           <textarea
             name=""
             id=""
-            placeholder="Write Names Of Medicine"
+            v-model="addproduct.description"
+            placeholder="Write Description"
             cols="30"
             rows="10"
           ></textarea>
           <div class="imgescon">
-            <input type="file" name="" placeholder="upload picture" id="" />
-            <input type="file" name="" placeholder="upload picture" id="" />
-            <input type="file" name="" placeholder="upload picture" id="" />
-            <input type="file" name="" placeholder="upload picture" id="" />
-            <input type="file" name="" placeholder="upload picture" id="" />
+            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
+            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
+            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
+            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
+            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
           </div>
         </div>
       </div>

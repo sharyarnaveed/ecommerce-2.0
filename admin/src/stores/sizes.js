@@ -6,10 +6,10 @@ export const usesizes=defineStore('thesizes',{
     ({
         size:[
             {id:1,name:'XS'},
-            {id:1,name:'S'},
-            {id:2,name:'M'},
-            {id:3,name:'L'},
-            {id:3,name:'XL'},
+            {id:2,name:'S'},
+            {id:3,name:'M'},
+            {id:4,name:'L'},
+            {id:5,name:'XL'},
 
         ]
     })
