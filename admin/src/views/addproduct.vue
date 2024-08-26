@@ -1,85 +1,84 @@
 <script setup>
-import { ref } from 'vue';
-import {usesizes} from "@/stores/sizes"
-import axios from 'axios';
-const shoessizes=usesizes();
-const addproduct=ref({
-  productname:'',
-  price:'',
-  storesizes:[],
-description:'',
-img1:null,
-img2:null,
-img3:null,
-img4:null,
-img5:null,
+import { onMounted, ref } from "vue";
+import { usesizes } from "@/stores/sizes";
+import axios from "axios";
+const gottencategory = ref([]);
+const shoessizes = usesizes();
 
+const addproduct = ref({
+  addedcategory: "1",
+  productname: "",
+  price: "",
+  storesizes: [],
+  description: "",
+  images: []
+});
 
-})
+const uploadfiles = (e) => {
+  Array.from(e.target.files).forEach((file) => {
+    addproduct.value.images.push(file);
+    console.log(file);
+  });
+};
 
-const uploadfiles=(e)=>
-{
-  addproduct.value.img1=e.target.files[0]
-  // addproduct.value.img1=e.target.files[1]
-  // addproduct.value.img2=e.target.files[2]
-  // addproduct.value.img3=e.target.files[3]
-  // addproduct.value.img4=e.target.files[4]
+const handleproduct = async () => {
+  // console.log(addproduct.value.addedcategory);/
+  const formdata = new FormData();
+  formdata.append("productname", addproduct.value.productname);
+  formdata.append("price", addproduct.value.price);
+  formdata.append("storesizes", JSON.stringify(addproduct.value.storesizes));
+  // formdata.append('storesizes',addproduct.value.storesizes);
 
+  formdata.append("description", addproduct.value.description);
+  formdata.append("category", addproduct.value.addedcategory);
+  addproduct.value.images.forEach((file) => {
+    formdata.append("images", file);
+  });
 
-  console.log(addproduct.value.img1=e.target.files[0]);
-  // addproduct.value.img1=e.target.files[1],
-  // addproduct.value.img2=e.target.files[2],
-  // addproduct.value.img3=e.target.files[3],
-  // addproduct.value.img4=e.target.files[4]);
-}
-
-
-const handleproduct=async()=>
-{
-const formdata=new FormData();
-formdata.append('productname',addproduct.value.productname);
-formdata.append('price',addproduct.value.price);
-formdata.append('storesizes',JSON.stringify(addproduct.value.storesizes));
-// formdata.append('storesizes',addproduct.value.storesizes);
-
-formdata.append('description',addproduct.value.description);
-
-  formdata.append('img1',addproduct.value.img1);
-
-
-console.log(formdata);
+  // console.log(formdata.append());
 
   // console.log(addproduct.value);
-try {
-  const responce=await axios.post("/api/admin/addproduct",formdata);
-  console.log(responce);
+  try {
+    const responce = await axios.post("/api/admin/addproduct", formdata);
+ if(responce.data)
+ {
+  alert(responce.data.message);
+ }
+addproduct.value={
+  addedcategory: "1",
+  productname: "",
+  price: "",
+  storesizes: [],
+  description: "",
 
-} catch (error) {
-  console.log(error);
 }
 
-}
+  } catch (error) {
+    console.log(error);
+  }
+};
+const addsizes = (theval, ischecked) => {
+  if (ischecked) {
+    addproduct.value.storesizes.push(theval);
+  } else {
+    addproduct.value.storesizes = addproduct.value.storesizes.filter(
+      (value) => value !== theval
+    );
+  }
 
+  console.log(addproduct.value.storesizes);
+};
 
+const getcategory = async () => {
+  const getcateg = await axios.get("/api/admin/getcategory");
+  gottencategory.value = getcateg.data;
 
-const addsizes=(theval, ischecked)=>
-{
-  
+  // console.log(gottencategory.value);
+};
 
-if(ischecked)
-{
-  addproduct.value.storesizes.push(theval);
-}
-else
-{
-  addproduct.value.storesizes=addproduct.value.storesizes.filter(value=>
-    value!==theval
-   );
-}
-
-console.log(addproduct.value.storesizes);
-}
-
+onMounted(() => {
+  getcategory();
+});
 </script>
 
 <template>
@@ -94,46 +93,96 @@ console.log(addproduct.value.storesizes);
         <div class="order_person_info">
           <input
             type="text"
-         v-model="addproduct.productname"
+            v-model="addproduct.productname"
             name=""
+            required
             placeholder="Product Name"
             id=""
           />
           <input
             type="text"
-        v-model="addproduct.price"
-           
+            v-model="addproduct.price"
             name=""
+            required
             placeholder="Product Price"
             id=""
           />
           <div class="ordersizescon">
-            <label v-for="(size, index)  in shoessizes.size" :key="index" for="">
-              <input @change="addsizes(shoessizes.size[index],$event.target.checked)"  type="checkbox" name="" id="" />
+            <label v-for="(size, index) in shoessizes.size" :key="index" for="">
+              <input
+                @change="
+                  addsizes(shoessizes.size[index], $event.target.checked)
+                "
+                type="checkbox"
+                name=""
+                id=""
+              />
               {{ size.name }}
             </label>
-
-            
-
-
-           
           </div>
         </div>
+
         <div class="order_info">
           <textarea
             name=""
             id=""
+            required
             v-model="addproduct.description"
             placeholder="Write Description"
             cols="30"
             rows="10"
           ></textarea>
+
           <div class="imgescon">
-            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
-            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
-            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
-            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
-            <input type="file" @change="uploadfiles" name="" placeholder="upload picture" id="" />
+            <input
+              type="file"
+              @change="uploadfiles"
+              name=""
+              placeholder="upload picture"
+              id=""
+            />
+            <input
+              type="file"
+              @change="uploadfiles"
+              name=""
+              placeholder="upload picture"
+              id=""
+            />
+            <input
+              type="file"
+              @change="uploadfiles"
+              name=""
+              placeholder="upload picture"
+              id=""
+            />
+            <input
+              type="file"
+              @change="uploadfiles"
+              name=""
+              placeholder="upload picture"
+              id=""
+            />
+            <input
+              type="file"
+              @change="uploadfiles"
+              name=""
+              placeholder="upload picture"
+              id=""
+            />
+          </div>
+        </div>
+        <div class="category_ietm">
+          <div>
+            Category
+            <select v-model="addproduct.addedcategory" name="" id="">
+              <option
+                v-for="(category, index) in gottencategory"
+                :key="category.category_id"
+                :value="category.category_id"
+              >
+                {{ category.category_name }}
+              </option>
+            </select>
           </div>
         </div>
       </div>
@@ -147,6 +196,7 @@ console.log(addproduct.value.storesizes);
 <style scoped>
 .ordersizescon {
   /* border: 2px solid green; */
+padding: 0px 5px;
   width: 40%;
   height: 100%;
   display: flex;
@@ -157,19 +207,21 @@ console.log(addproduct.value.storesizes);
 .ordersizescon label {
   display: flex;
   /* grid-template-columns: repeat(4,auto); */
-  justify-content: space-between;
+  justify-content: space-around;
   /* border: 2px solid red; */
-  width: 15%;
+  width: 20%;
+  /* gap: ; */
   height: 80%;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-family: var(--font);
   align-items: center;
 }
 
 .ordersizescon label input {
-  width: 80%;
-  width: 80%;
-  margin: 5px 9px;
+  width: 50%;
+  /* width: 0%; */
+  height: 50%;
+  /* margin: 0px 9px; */
 }
 .imgescon {
   /* border: 2px solid red; */
@@ -209,7 +261,7 @@ console.log(addproduct.value.storesizes);
 }
 .order_infocontainer {
   /* border: 2px solid blue; */
-  height: 65%;
+  height: 73%;
 }
 .order_person_info {
   /* border: 2px solid purple; */
@@ -284,6 +336,28 @@ console.log(addproduct.value.storesizes);
   border: 2px solid black;
 
   cursor: pointer;
+}
+.category_ietm {
+  /* border: 2px solid red; */
+  height: 15%;
+  padding: 10px 10px;
+  justify-content: space-around;
+  display: flex;
+  align-items: center;
+}
+
+.category_ietm div {
+  /* border: 2px solid yellow; */
+  width: 25%;
+  height: 100%;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.category_ietm div select {
+  width: 90px;
+  height: 90%;
 }
 
 @media (max-width: 349px) {
@@ -410,7 +484,7 @@ console.log(addproduct.value.storesizes);
   }
   .order_info {
     flex-direction: row;
-    height: 90%;
+    height: 70%;
   }
   .order_info textarea {
     width: 60%;

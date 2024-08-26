@@ -1,4 +1,24 @@
 <script setup>
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+
+const gottenproducts=ref([]);
+
+const getproducts=async()=>
+{
+  try {
+    const responce= await axios.get('/api/admin/getproduct')
+    gottenproducts.value=responce.data;
+    
+  } catch (error) {
+    
+  }
+}
+
+onMounted(()=>
+{
+  getproducts()
+})
 
 </script>
 
@@ -10,13 +30,15 @@
     <th>Product Name</th>
     <th>Price</th>
     <th>Date</th>
+    <th>Option</th>
     
     
   </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-   
+  <tr v-for="products in gottenproducts" :key="products.product_id">
+    <td>{{ products.product_name }}</td>
+    <td>{{ products.category_name }}</td>
+    <td>{{ products.product_price }}</td>
+    <td>{{ products.date_time }}</td>
     <td><button style="width: 70%;height: 100%;"> Delete </button></td>
   </tr>
 

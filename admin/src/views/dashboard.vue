@@ -56,7 +56,7 @@
 
 <style >
 .adminmain{
-    border: 2px solid red;
+    /* border: 2px solid red; */
     height: 100vh;
     display: flex;
 }
@@ -123,11 +123,11 @@
     border: 2px solid var(--blue);
 }
 .dashboardcon{
-    border: 2px solid green;
+    /* border: 2px solid green; */
     width: 80%;
 }
 .dashtop{
-    border: 2px solid red;
+    /* border: 2px solid red; */
     height: 10%;
 }
 </style>
