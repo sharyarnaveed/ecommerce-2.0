@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
+import Bags from '@/components/bags.vue'
+import Belt from "@/components/belt.vue"
+import shoes  from "@/components/shoes.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,10 +28,27 @@ const router = createRouter({
       path:'/productdisplay',
       name:'productdisplay',
       props:true,
-      component: () => import('../views/productdisplay.vue')
+      component: () => import('../views/productdisplay.vue'),
+      children:[
+        {
+          component:Bags,
+          path:'bags'
+
+        },
+        {
+          component:shoes,
+          path:'shoes'
+
+        },
+        {
+          component:Belt,
+          path:'belt'
+
+        }
+      ]
     },
     {
-      path:'/itemdetail',
+      path:'/itemdetail/:id',
       name:'itemdetail',
       props:true,
       component: () => import('../views/itemdetail.vue')

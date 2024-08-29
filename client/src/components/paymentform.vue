@@ -2,9 +2,18 @@
 import { ref, watch } from "vue";
 
 const paymentsucess = ref(false);
+const paymentsdetails=ref({
+  fname:'',
+  lname:'',
+  email:'',
+  Cod:'',
+  address:'',
+  mobilenumber:''
+})
+
 
 const handlesubmiison = () => {
-  console.log("suceess");
+  console.log(paymentsdetails.value.Cod);
   paymentsucess.value = true;
 };
 
@@ -25,6 +34,7 @@ const handlesubmiison = () => {
             class="leftpayinfo"
             placeholder="First Name"
             type="text"
+            v-model="paymentsdetails.fname"
             name=""
             id=""
           />
@@ -32,6 +42,7 @@ const handlesubmiison = () => {
             class="leftpayinfo"
             placeholder="Last Name"
             type="text"
+            v-model="paymentsdetails.lname"
             name=""
             id=""
           />
@@ -39,6 +50,7 @@ const handlesubmiison = () => {
             class="leftpayinfo"
             placeholder="Email Address"
             type="email"
+               v-model="paymentsdetails.email"
             name=""
             id=""
           />
@@ -49,6 +61,7 @@ const handlesubmiison = () => {
               type="checkbox"
               id="check-24"
               required
+                 v-model="paymentsdetails.Cod"
               name="check"
               value=""
             />
@@ -64,6 +77,7 @@ const handlesubmiison = () => {
             class="payaddress"
             type="text"
             name=""
+               v-model="paymentsdetails.address"
             placeholder="Address"
             id=""
           ></textarea>
@@ -73,6 +87,7 @@ const handlesubmiison = () => {
             type="text"
             name=""
             id=""
+             v-model="paymentsdetails.mobilenumber"
           />
           <button type="submit">Place Order</button>
         </div>

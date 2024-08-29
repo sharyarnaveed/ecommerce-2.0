@@ -1,24 +1,51 @@
 <script setup>
+import router from '@/router';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
 const gottenproducts=ref([]);
-
+const pinfo=ref({
+pid:''
+});
 const getproducts=async()=>
 {
   try {
     const responce= await axios.get('/api/admin/getproduct')
     gottenproducts.value=responce.data;
+    console.log(responce.data);
     
   } catch (error) {
-    
+    console.log(error);
   }
 }
 
 onMounted(()=>
 {
   getproducts()
+  
 })
+
+// deletion of product
+
+const deleteproduct=async(id)=>
+{
+  // console.log(id);
+  pinfo.value.pid=id
+  console.log(pinfo.value.pid);
+try {
+  const responce=await axios.post('/api/admin/deleteproduct',pinfo.value)
+  // console.log(responce);
+  if(responce)
+{
+  alert(responce.data.message)
+  getproducts()
+}
+  
+} catch (error) {
+  console.log("error in deleteing product",error);
+}
+}
+
 
 </script>
 
@@ -39,7 +66,9 @@ onMounted(()=>
     <td>{{ products.category_name }}</td>
     <td>{{ products.product_price }}</td>
     <td>{{ products.date_time }}</td>
-    <td><button style="width: 70%;height: 100%;"> Delete </button></td>
+    <td>
+      <button @click="deleteproduct(products.product_id)" type="submit" style="width: 70%;height: 100%;" > Delete </button>
+    </td>
   </tr>
 
  

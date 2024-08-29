@@ -37,7 +37,7 @@ fill="#000000" stroke="none">
         </div>
 
 <ul class="topoptions">
-    <router-link to="/profile" class="topop">My Profile</router-link>
+    <!-- <router-link to="/profile" class="topop">My Profile</router-link> -->
     <router-link to="/cart"  class="topop">
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
  width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000"
@@ -87,9 +87,9 @@ m2120 0 c45 -23 80 -80 80 -130 0 -76 -74 -150 -150 -150 -76 0 -150 74 -150
             </router-link>
             <ul class="nav_bar_options">
                 <router-link to="/" class="theoption">Home</router-link>
-                <router-link to="/productdisplay" class="theoption">BAGS</router-link>
-                <router-link to="/productdisplay" class="theoption">SNEAKERS</router-link>
-                <router-link to="/productdisplay" class="theoption">BELT</router-link>
+                <router-link to="/productdisplay/bags" class="theoption">BAGS</router-link>
+                <router-link to="/productdisplay/shoes" class="theoption">SNEAKERS</router-link>
+                <router-link to="/productdisplay/belt" class="theoption">BELT</router-link>
                 <router-link to="/contact" class="theoption">CONTACT</router-link>
             </ul>
         </nav>

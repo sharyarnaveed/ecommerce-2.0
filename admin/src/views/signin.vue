@@ -1,4 +1,5 @@
 <script setup>
+import router from "@/router";
 import axios from "axios";
 import { ref } from "vue";
 
@@ -13,8 +14,12 @@ const userdetails=ref({
 
 const handlesignin = async() => {
 try {
-  const responce= await axios.post("/api/admin/register",userdetails.value);
+  const responce= await axios.post("/api/admin/login",userdetails.value);
   console.log(responce.data);
+  if(responce.data.message=="Login Successfull")
+{
+  router.push("/adminhome")
+}
   console.log(responce);
 } catch (error) {
   

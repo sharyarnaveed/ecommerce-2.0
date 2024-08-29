@@ -1,6 +1,6 @@
 <script setup>
 import addesign from '../components/theadddesign.vue';
-
+import { RouterLink,RouterView } from 'vue-router';
 import itemcard from '../components/itemcard.vue';
 </script>
 
@@ -13,81 +13,8 @@ import itemcard from '../components/itemcard.vue';
 
 
    
-    <div class="resultproducts">
-
-    
-<router-link to="itemdetail" class="products_card">
-<itemcard/>
-</router-link>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-<div class="products_card">
-<itemcard/>
-</div>
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-
-
-
+<div class="resultproducts">
+    <RouterView/>
 </div>
 
 

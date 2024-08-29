@@ -14,3 +14,7 @@
   --font:"Poppins", sans-serif;
  
 }
+body
+{
+  scroll-behavior: smooth;
+}

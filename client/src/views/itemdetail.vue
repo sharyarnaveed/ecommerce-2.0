@@ -1,63 +1,173 @@
 <script setup>
-import { ref } from "vue";
-
+import { onMounted, ref } from "vue";
 import Description from "@/components/productdetailreview.vue";
-// import productdisplay from "./productdisplay.vue";
+import axios from "axios";
+
+const props = defineProps({
+  id: String,
+});
+
+const mainimg = ref("");
+const product_data = ref([]);
+const images = ref([]);
 const currenttab = ref("Description");
-const tabs = {
-    Description,
-  
+const tabs = { Description };
+const quantity = ref(1);
+const cartsucess = ref(false);
+
+const getproductdetails = async (id) => {
+  try {
+    const response = await axios.get(`/api/user/productdetail/${id}`);
+    product_data.value = response.data;
+
+    // Parse the images if they are in JSON format
+    const jsonImgs = JSON.parse(product_data.value[0].pimg1);
+    images.value = jsonImgs.map((img, index) => {
+      return {
+        id: index,
+        path: img.path.replace(/\\/g, "/"), // Fix path separators
+      };
+    });
+
+    // Set the first image as the main image
+    mainimg.value = images.value[0].path;
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+  }
 };
 
-const check=ref("Description text")
-const theimg = ref("");
-const quantity = ref(0);
+// Call getproductdetails when the component is mounted
+onMounted(async () => {
+  await getproductdetails(props.id);
+});
 
 const decrement = () => {
-  if (quantity.value == 0) {
-    quantity.value = 0;
-  } else {
+  if (quantity.value > 1) {
     quantity.value--;
   }
 };
 
-const displayimge = (val) => {
-  theimg.value = val;
-  console.log(val);
+// for add to cart
+
+const dbPromise = indexedDB.open("cartDB", 1);
+
+dbPromise.onupgradeneeded = (event) => {
+  const db = event.target.result;
+  // Create an object store for cart items
+  if (!db.objectStoreNames.contains("cartItems")) {
+    const objectStore = db.createObjectStore("cartItems", {
+      keyPath: "id",
+      autoIncrement: true,
+    });
+    objectStore.createIndex("productID", "product_id", { unique: false });
+  }
 };
-const cartsucess=ref(false)
-const addtocart=()=>
-{
-cartsucess.value=true
-}
 
+dbPromise.onerror = (event) => {
+  console.error("Error opening database:", event.target.errorCode);
+};
 
+const addtocart = () => {
+  const dbRequest = indexedDB.open("cartDB", 1);
 
+  dbRequest.onsuccess = (event) => {
+    const db = event.target.result;
+    const transaction = db.transaction(["cartItems"], "readwrite");
+    const objectStore = transaction.objectStore("cartItems");
+    const index = objectStore.index("productID");
+
+    // Prepare the product data
+    const product = {
+      product_id: props.id,
+      product_name: product_data.value[0].product_name,
+      product_price: product_data.value[0].product_price,
+      quantity: quantity.value,
+      product_img:images.value[0].path
+    };
+
+    // Check if the product is already in the cart
+    const getRequest = index.get(props.id);
+
+    getRequest.onsuccess = () => {
+      if (getRequest.result) {
+        // Product exists, update quantity
+        const updatedProduct = getRequest.result;
+        updatedProduct.quantity += quantity.value;
+
+        const updateRequest = objectStore.put(updatedProduct);
+
+        updateRequest.onsuccess = () => {
+          console.log("Product quantity updated successfully");
+          cartsucess.value = true;
+        };
+
+        updateRequest.onerror = () => {
+          console.error(
+            "Error updating product quantity:",
+            updateRequest.error
+          );
+        };
+      } else {
+        // Product does not exist, add as a new entry
+        const addRequest = objectStore.add(product);
+
+        addRequest.onsuccess = () => {
+          console.log("Product added to cart successfully");
+          cartsucess.value = true;
+        };
+
+        addRequest.onerror = () => {
+          console.error("Error adding product to cart:", addRequest.error);
+        };
+      }
+    };
+
+    getRequest.onerror = () => {
+      console.error("Error checking product existence:", getRequest.error);
+    };
+  };
+
+  dbRequest.onerror = (event) => {
+    console.error("Error opening database:", event.target.errorCode);
+  };
+};
 </script>
 
 <template>
-  <section class="productdetailcon">
+  <section
+    v-for="(product, index) in product_data"
+    :key="index"
+    class="productdetailcon"
+  >
     <div class="productimage">
       <div class="mainimg">
-        <!-- <img :src="theimg"/> -->
-        {{ theimg }}
+        <img :src="`http://localhost:8000/${mainimg}`" alt="Product Image" />
       </div>
+
       <div class="subimages">
-        <button class="subimg" @click="displayimge('1')">1</button>
-        <button class="subimg" @click="displayimge('2')">2</button>
-        <button class="subimg" @click="displayimge('3')">3</button>
-        <button class="subimg" @click="displayimge('4')">4</button>
+        <button
+          v-for="(img, index) in images"
+          :key="index"
+          class="subimg"
+          @click="mainimg = img.path"
+        >
+          <img
+            :src="`http://localhost:8000/${img.path}`"
+            alt="Product Sub Image"
+            style="width: 100%; height: 100%"
+          />
+        </button>
       </div>
     </div>
 
-    <div  class="productdetail">
-        <div v-if="cartsucess" class="confiramtion_message">
-            <h4>the message</h4>
-        </div>
+    <div class="productdetail">
+      <div v-if="cartsucess" class="confirmation_message">
+        <h4>Item added to cart successfully!</h4>
+      </div>
 
       <div class="productdetailconn">
-        <h1>Product name</h1>
-        <h3>Product Price</h3>
+        <h1>{{ product.product_name }}</h1>
+        <h3>${{ product.product_price }}</h3>
       </div>
 
       <div class="quantity_addcartconn">
@@ -66,94 +176,104 @@ cartsucess.value=true
           <span>{{ quantity }}</span>
           <button @click="quantity++">+</button>
         </div>
-        <div class="sizeoption"></div>
         <div class="addtocart">
           <button @click="addtocart">Add To Cart</button>
         </div>
       </div>
 
       <div class="reviewproduct">
-        <button  :class="['optionactive',{active: currenttab===tab}]" v-for="(_, tab) in tabs" :key="tab" @click="currenttab = tab">
-
+        <button
+          :class="['optionactive', { active: currenttab === tab }]"
+          v-for="(_, tab) in tabs"
+          :key="tab"
+          @click="currenttab = tab"
+        >
           {{ tab }}
         </button>
         <div class="reviewconn">
-          <component :description="check" :is="tabs[currenttab]"></component>
+          <component
+            :description="product.product_description"
+            :is="tabs[currenttab]"
+          ></component>
         </div>
       </div>
-
     </div>
   </section>
 </template>
 
 <style scoped>
-
 .productdetailcon {
-  border: 2px solid red;
-  height: 500px;
+  /* border: 2px solid red; */
+  height: 550px;
   display: flex;
 }
+
 .productimage {
-  /* border: 2px solid green; */
   width: 45%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
 }
+
 .mainimg {
-  border: 2px solid red;
+  /* border: 2px solid red; */
   height: 80%;
   width: 80%;
 }
+.mainimg img {
+  width: 100%;
+  height: 100%;
+}
 .subimages {
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
   width: 90%;
   display: flex;
   justify-content: space-evenly;
   height: 15%;
 }
+
 .subimg {
   width: 20%;
   background: transparent;
   cursor: pointer;
   border: 2px solid rgba(0, 0, 0, 0.185);
 }
-.confiramtion_message{
-    /* border: 2px solid purple; */
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1;
-    height: 15%;
-    background-color: var(--light-blue);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    font-family: var(--font);
 
+.confirmation_message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  height: 15%;
+  background-color: var(--light-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-family: var(--font);
 }
+
 .productdetail {
-  /* border: 2px solid blue; */
   width: 55%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  /* align-items: s; */
   position: relative;
   padding: 10px 20px;
 }
+
 .productdetailconn {
-  /* border: 2px solid red; */
   border-bottom: 2px solid rgba(0, 0, 0, 0.123);
 }
+
 .productdetailconn h1 {
   font-size: 2rem;
   font-family: var(--font);
   font-weight: 400;
 }
+
 .productdetailconn h3 {
   font-size: 1.2rem;
   color: var(--blue);
@@ -163,21 +283,21 @@ cartsucess.value=true
 }
 
 .quantity_addcartconn {
-  /* border: 2px solid green; */
   border-bottom: 2px solid rgba(0, 0, 0, 0.096);
   height: 20%;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
+
 .quantityconn {
-  /* border: 2px solid purple; */
   width: 20%;
   height: 55%;
   background-color: #d5d5d538;
   display: flex;
   justify-content: center;
 }
+
 .quantityconn button {
   width: 30%;
   font-size: 1.5rem;
@@ -187,6 +307,7 @@ cartsucess.value=true
   background-color: transparent;
   border: 2px solid rgba(0, 0, 0, 0.055);
 }
+
 .quantityconn span {
   width: 40%;
   justify-content: center;
@@ -195,11 +316,12 @@ cartsucess.value=true
   font-size: 1.3rem;
   font-family: var(--font);
 }
+
 .addtocart {
-  /* border: 2px solid pink; */
   height: 50%;
   width: 22%;
 }
+
 .addtocart button {
   width: 100%;
   cursor: pointer;
@@ -212,9 +334,9 @@ cartsucess.value=true
 }
 
 .reviewproduct {
-  /* border: 2px solid orange; */
   height: 55%;
 }
+
 .reviewproduct button {
   height: 15%;
   width: 20%;
@@ -225,21 +347,17 @@ cartsucess.value=true
   cursor: pointer;
   outline: none;
 }
+
 .reviewconn {
-  /* border: 2px solid red; */
   height: 85%;
   padding: 15px 10px;
   font-size: 1rem;
   font-family: var(--font);
 }
 
-.optionactive.active
-{
-color: var(--blue);
-
-border-bottom: 3px solid var(--blue);
-border: left;
+.optionactive.active {
+  color: var(--blue);
+  border-bottom: 3px solid var(--blue);
+  border: left;
 }
-
-
 </style>

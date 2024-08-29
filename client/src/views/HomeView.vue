@@ -1,26 +1,59 @@
 <script setup>
-import { ref } from 'vue';
+import { defineAsyncComponent, onMounted, ref } from 'vue';
+import axios from "axios"
 import addesign from '../components/theadddesign.vue'
 const saleimg=ref('https://images.unsplash.com/photo-1578986175247-7d60c6df07c5?q=80&w=1494&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-import itemcard from '../components/itemcard.vue';
 import servicesvg from '../assets/shipping.svg'
 import refundsvg from '../assets/refund.svg'
 import supportsvg from '../assets/support.svg'
 
+// const itemcard =defineAsyncComponent(()=>
+// {
+//     import ("../components/itemcard.vue")
+// })
+import itemcard from '../components/itemcard.vue';
 
 
 
 import policy from '../components/policy.vue'
 const saleset=ref('30')
-const bestval=ref('*')
+const bestval=ref('')
+const productdata=ref([]);
+const categoryproduct=ref({
+    categoryval:""
+})
 
 // function to get best sellers products from database
-const getbestsellers=(thebuttonval)=>
+const getbestsellers=async(thebuttonval)=>
 {
-bestval.value=thebuttonval;
+try {
+    bestval.value=thebuttonval;
+    if(bestval.value==='*')
+    {
+        const responce= await axios.get("/api/user/getbestsellerall");
+        productdata.value=responce.data;
+        // console.log(productdata.value);
+    }
+    else 
+    {
+    categoryproduct.value.categoryval=bestval.value;
+        console.log(categoryproduct.value.categoryval);
+    const responce= await axios.post("/api/user/getbestsellerval",categoryproduct.value);
+    productdata.value=  responce.data;
+    }
+} catch (error) {
+ console.log("Error in fetching Product",error);   
+}
+
+
 // console.log(thebuttonval);
 }
 
+
+onMounted(()=>
+{
+    getbestsellers('*');
+})
 
 
 </script>
@@ -43,59 +76,17 @@ bestval.value=thebuttonval;
 <div  class="displaycategory">
 <button @click="getbestsellers('*')">All</button>
 <button @click="getbestsellers('bags')" >Bags</button>
-<button @click="getbestsellers('sneakers')">Snekers</button>
+<button @click="getbestsellers('shoes')">Snekers</button>
 <button @click="getbestsellers('belts')" >Belt</button>
 </div>
 
 <div class="resultproducts">
 
     
-<div class="products_card">
-<itemcard/>
-</div>
+<router-link :to="{name:'itemdetail',params:{id:productstuff.product_id}}" v-for="productstuff in productdata" :key="productstuff.product_id" class="products_card">
+<itemcard :productstuff="productstuff" />
+</router-link>
 
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-<div class="products_card">
-<itemcard/>
-</div>
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-
-<div class="products_card">
-<itemcard/>
-</div>
-
-
-<div class="products_card">
-<itemcard/>
-</div>
 
 </div>
 
