@@ -21,7 +21,7 @@ console.log(mainimg.value);
 </script>
 
 <template>
-  <div>
+
     <div  class="productimg">
       <!-- Dynamically bind the src attribute to the correct image path -->
       <img :src="`http://localhost:8000/${mainimg}`" alt="Product Image">
@@ -30,7 +30,7 @@ console.log(mainimg.value);
 
     <h4>{{ prop.productstuff.product_name }}</h4>
     <h5>${{ prop.productstuff.product_price }}</h5>
-  </div>
+
 </template>
 
 <style>
@@ -52,7 +52,7 @@ console.log(mainimg.value);
   height: 15%;
   font-family: var(--font);
   font-weight: 300;
-  font-size: 1rem;
+  font-size: 1.4rem;
   display: flex;
   padding: 5px 5px;
   align-items: center;
@@ -63,7 +63,7 @@ console.log(mainimg.value);
   font-family: var(--font);
   font-weight: 300;
   color: var(--blue);
-  font-size: 1rem;
+  font-size: 1.2rem;
   padding: 5px 5px;
 }
 </style>

@@ -43,6 +43,7 @@ const handleproduct = async () => {
  if(responce.data)
  {
   alert(responce.data.message);
+  location.reload();
  }
 addproduct.value={
   addedcategory: "1",

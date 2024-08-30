@@ -243,7 +243,7 @@ height: 50px;
 }
 .productdetail th
 {
-    font-size: 16px;
+    font-size: 1rem;
 }
 .product_img{
     /* border: 2px solid red; */
@@ -251,7 +251,7 @@ height: 50px;
 }
 .product_img img
 {
-    width: 100%;
+    width: 13%;
     height: 100%;
 }
 .product_related{
@@ -260,6 +260,7 @@ display: flex;
 justify-content: start;
 align-items: center;
 gap:15px;
+width: 90%;
 }
 .delete_btn{
     background-color: transparent;
@@ -292,7 +293,7 @@ gap:15px;
 }
 .cost_conn h4
 {
-    font-size: 15px;
+    font-size: 1rem;
     font-family: var(--font);
     font-weight: 400;
     /* border: 2px solid red; */

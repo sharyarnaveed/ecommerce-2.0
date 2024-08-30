@@ -64,7 +64,7 @@ onMounted(()=>
     <h1>Super Flash Sale <br>
         {{saleset}}% Off</h1>
 
-        <router-link class="thesaleroute" to="/productdisplay">Shop Now</router-link>
+        <router-link class="thesaleroute" to="/productdisplay/shoes">Shop Now</router-link>
 </div>
 
 
@@ -77,7 +77,7 @@ onMounted(()=>
 <button @click="getbestsellers('*')">All</button>
 <button @click="getbestsellers('bags')" >Bags</button>
 <button @click="getbestsellers('shoes')">Snekers</button>
-<button @click="getbestsellers('belts')" >Belt</button>
+<button @click="getbestsellers('belt')" >Belt</button>
 </div>
 
 <div class="resultproducts">
@@ -201,12 +201,13 @@ gap: 30px;
 }
 .productimg{
     /* border: 2px solid red; */
-    height: 70%;
+    height: 71%;
 }
 .productimg img
 {
     width: 100%;
     height: 100%;
+  
 
 }
 .products_card h4

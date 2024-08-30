@@ -14,12 +14,16 @@ const currenttab = ref("Description");
 const tabs = { Description };
 const quantity = ref(1);
 const cartsucess = ref(false);
+const sizes=ref([])
+const selectdsize=ref(null)
+
+
 
 const getproductdetails = async (id) => {
   try {
     const response = await axios.get(`/api/user/productdetail/${id}`);
     product_data.value = response.data;
-
+console.log(product_data.value);
     // Parse the images if they are in JSON format
     const jsonImgs = JSON.parse(product_data.value[0].pimg1);
     images.value = jsonImgs.map((img, index) => {
@@ -31,6 +35,12 @@ const getproductdetails = async (id) => {
 
     // Set the first image as the main image
     mainimg.value = images.value[0].path;
+
+ sizes.value=JSON.parse(product_data.value[0].product_size);
+// console.log(sizes.value[0]);
+selectdsize.value=sizes.value[0].name
+// sizes.value=jsonsizes.map()
+
   } catch (error) {
     console.error("Error fetching product details:", error);
   }
@@ -68,6 +78,8 @@ dbPromise.onerror = (event) => {
 };
 
 const addtocart = () => {
+const selectsize=selectdsize.value
+//  console.log(selectsize);
   const dbRequest = indexedDB.open("cartDB", 1);
 
   dbRequest.onsuccess = (event) => {
@@ -82,7 +94,8 @@ const addtocart = () => {
       product_name: product_data.value[0].product_name,
       product_price: product_data.value[0].product_price,
       quantity: quantity.value,
-      product_img:images.value[0].path
+      product_img:images.value[0].path,
+      product_size:selectsize.value
     };
 
     // Check if the product is already in the cart
@@ -131,6 +144,8 @@ const addtocart = () => {
     console.error("Error opening database:", event.target.errorCode);
   };
 };
+
+
 </script>
 
 <template>
@@ -176,6 +191,14 @@ const addtocart = () => {
           <span>{{ quantity }}</span>
           <button @click="quantity++">+</button>
         </div>
+
+        <div class="size">
+          <select v-model="selectdsize" class="sizeoption" name="" id="">
+            <option  v-for="size in sizes" :key="size.id" :value="size.name">{{ size.name }}</option>
+          </select>
+        </div>
+
+
         <div class="addtocart">
           <button @click="addtocart">Add To Cart</button>
         </div>
@@ -208,6 +231,27 @@ const addtocart = () => {
   display: flex;
 }
 
+.size
+{
+  /* border:2px solid red; */
+width: 20%;
+height: 50%;
+}
+.sizeoption{
+  height: 95%;
+  width: 85%;
+  font-size: 1.1rem;
+  background-color: #bcddfe52;
+  outline:none;
+  color: var(--blue);
+  border-radius: 5px;
+  border: none;
+}
+.sizeoption option
+{
+  font-size: 1.1rem;
+  background-color: white;
+}
 .productimage {
   width: 45%;
   display: flex;

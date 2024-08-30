@@ -7,7 +7,7 @@ import itemcard from '../components/itemcard.vue';
 
 <template>
    <main class="productdisplayconn">
-    <aside class="productaside">aside panel</aside>
+    <!-- <aside class="productaside">aside panel</aside> -->
 <section class="productdisplay">
 <addesign/>
 
@@ -41,7 +41,7 @@ height: auto;
 }
 .productdisplay{
     /* border: 2px solid blue; */
-    width: 75%;
+    width: 100%;
     /* height: auto; */
     /* min-height: 100px; */
     /* padding: 10px 10px; */

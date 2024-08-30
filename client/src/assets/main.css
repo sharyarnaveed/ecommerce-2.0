@@ -18,3 +18,9 @@ body
 {
   scroll-behavior: smooth;
 }
+
+.products_card{
+ color: black;
+ text-decoration: none;
+
+}
