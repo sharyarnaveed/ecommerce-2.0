@@ -1,6 +1,7 @@
 <script setup>
-import { ref, watch } from "vue";
-
+import axios from "axios";
+import { ref, watch, onMounted } from "vue";
+const storecartitems=ref([])
 const paymentsucess = ref(false);
 const paymentsdetails=ref({
   fname:'',
@@ -8,14 +9,88 @@ const paymentsdetails=ref({
   email:'',
   Cod:'',
   address:'',
-  mobilenumber:''
+  mobilenumber:'',
+  getproducts_id:[]
 })
+// open indexDB
+// const=ref([])
+function openDatabase() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('cartDB', 1); // Increment the version if needed
 
+    request.onupgradeneeded = function(event) {
+      const db = event.target.result;
+      // Check if the object store exists before creating it
+      if (!db.objectStoreNames.contains('cartItems')) {
+        db.createObjectStore('cartItems', { keyPath: 'id' });
+      }
+    };
 
-const handlesubmiison = () => {
+    request.onsuccess = function(event) {
+      resolve(event.target.result);
+    };
+
+    request.onerror = function(event) {
+      reject(event.target.errorCode);
+    };
+  });
+}
+
+async function getData() {
+  try {
+    const db = await openDatabase();
+    const transaction = db.transaction(['cartItems'], 'readonly');
+    const objectStore = transaction.objectStore('cartItems');
+    // console.log(objectStore);
+    const request = objectStore.getAll(); // Retrieve all items
+// console.log(request);
+    request.onsuccess = function(event) {
+      const data = event.target.result;
+      storecartitems.value = data;
+    // console.log(data);
+      console.log('Data retrieved:', storecartitems.value);
+     
+      paymentsdetails.value.getproducts_id=storecartitems.value.map((i)=>
+    {
+return i.product_id;
+    })
+
+   
+    };
+
+    request.onerror = function(event) {
+      console.error('Error retrieving data:', event.target.errorCode);
+    };
+  } catch (error) {
+    console.error('Database error:', error);
+  }
+}
+
+onMounted(() => {
+  getData();
+});
+
+const handlesubmiison = async() => {
   console.log(paymentsdetails.value.Cod);
+  // 
+if(paymentsdetails.value.Cod==true)
+{
+  try {
+  const responce= await axios.post("/api/user/order",paymentsdetails.value);
+  console.log(responce);
+  if(responce.data.success==true)
+ {
   paymentsucess.value = true;
+ }
+
+ } catch (error) {
+  console.log("Failed To place The Order", error);
+ }
+}
+
+
 };
+
 
 
 </script>
@@ -89,7 +164,7 @@ const handlesubmiison = () => {
             id=""
              v-model="paymentsdetails.mobilenumber"
           />
-          <button type="submit">Place Order</button>
+          <button  type="submit">Place Order</button>
         </div>
       </form>
     </div>
